@@ -13,7 +13,7 @@ import '../../viewmodels/turismo_viewmodel.dart';
 /// - Muestra visualmente si el lugar se encuentra guardado en favoritos.
 /// - Diseño limpio, sencillo y acorde a una aplicación turística moderna.
 class DetallePantalla extends StatefulWidget {
-  const DetallePantalla({super.key});
+   const DetallePantalla({super.key});
 
   static const String routeName = '/detalle';
 
@@ -38,13 +38,8 @@ class _DetallePantallaState extends State<DetallePantalla> {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Obtención de datos mediante arguments de la ruta nombrada
     final Object? args = ModalRoute.of(context)?.settings.arguments;
-
-    // ViewModel observado con context.watch()
     final viewModel = context.watch<TurismoViewModel>();
-
-    // Si se pasa por arguments se usa, de lo contrario fallback al lugar del ViewModel
     final LugarTuristico? lugar = (args is LugarTuristico)
         ? args
         : (viewModel.lugarSeleccionado ??
@@ -52,32 +47,30 @@ class _DetallePantallaState extends State<DetallePantalla> {
 
     if (lugar == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Detalle del Lugar')),
-        body: const Center(
+        appBar: AppBar(title:  Text('Detalle del Lugar')),
+        body:  Center(
           child: Text('No se encontraron datos del lugar turístico.'),
         ),
       );
     }
 
-    // Comprobar si el lugar actual está en favoritos
     final bool esFavorito = viewModel.esFavorito(lugar.id);
     final int indiceActual = viewModel.indiceImagenActual;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F9FC),
+      backgroundColor:  Color(0xFFF7F9FC),
       body: CustomScrollView(
         slivers: [
-          // AppBar colapsable con la galería de imágenes deslizables
           SliverAppBar(
             expandedHeight: 340.0,
             pinned: true,
             backgroundColor: Theme.of(context).colorScheme.primary,
             leading: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:  EdgeInsets.all(8.0),
               child: CircleAvatar(
-                backgroundColor: const Color(0x73000000),
+                backgroundColor:  Color(0x73000000),
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  icon:  Icon(Icons.arrow_back, color: Colors.white),
                   tooltip: 'Regresar',
                   onPressed: () {
                     if (Navigator.canPop(context)) {
@@ -88,11 +81,10 @@ class _DetallePantallaState extends State<DetallePantalla> {
               ),
             ),
             actions: [
-              // Icono que muestra y permite alternar si el lugar está guardado en favoritos
               Padding(
-                padding: const EdgeInsets.only(right: 12.0),
+                padding:  EdgeInsets.only(right: 12.0),
                 child: CircleAvatar(
-                  backgroundColor: const Color(0x73000000),
+                  backgroundColor:  Color(0x73000000),
                   child: IconButton(
                     icon: Icon(
                       esFavorito ? Icons.favorite : Icons.favorite_border,
@@ -112,12 +104,10 @@ class _DetallePantallaState extends State<DetallePantalla> {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  // Gesto 2: Deslizamiento horizontal para recorrer la galería de imágenes
                   PageView.builder(
                     controller: _pageController,
                     itemCount: lugar.imagenes.length,
                     onPageChanged: (indice) {
-                      // Actualiza el índice en TurismoViewModel usando context.read()
                       context.read<TurismoViewModel>().cambiarImagen(indice);
                     },
                     itemBuilder: (context, index) {
@@ -129,7 +119,7 @@ class _DetallePantallaState extends State<DetallePantalla> {
                           if (progress == null) return child;
                           return Container(
                             color: Colors.grey.shade300,
-                            child: const Center(
+                            child:  Center(
                               child: CircularProgressIndicator(strokeWidth: 2.5),
                             ),
                           );
@@ -140,15 +130,15 @@ class _DetallePantallaState extends State<DetallePantalla> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
+                                 Icon(
                                   Icons.landscape_rounded,
                                   size: 64,
                                   color: Colors.white70,
                                 ),
-                                const SizedBox(height: 8),
+                                 SizedBox(height: 8),
                                 Text(
                                   lugar.nombre,
-                                  style: const TextStyle(
+                                  style:  TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
                                   ),
@@ -160,26 +150,24 @@ class _DetallePantallaState extends State<DetallePantalla> {
                       );
                     },
                   ),
-
-                  // Gradiente inferior para mejorar contraste visual
-                  const Positioned.fill(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Color(0x4D000000),
-                            Colors.transparent,
-                            Color(0xA6000000),
-                          ],
-                          stops: [0.0, 0.5, 1.0],
+                   Positioned.fill(
+                    child: IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0x4D000000),
+                              Colors.transparent,
+                              Color(0xA6000000),
+                            ],
+                            stops: [0.0, 0.5, 1.0],
+                          ),
                         ),
                       ),
                     ),
                   ),
-
-                  // Indicador del gesto de deslizamiento y contador de imágenes
                   Positioned(
                     bottom: 16,
                     left: 20,
@@ -187,46 +175,43 @@ class _DetallePantallaState extends State<DetallePantalla> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Puntos indicadores de páginas (Dots)
                         Row(
                           children: List.generate(
                             lugar.imagenes.length,
                             (i) => AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              margin: const EdgeInsets.symmetric(horizontal: 3),
+                              duration:  Duration(milliseconds: 300),
+                              margin:  EdgeInsets.symmetric(horizontal: 3),
                               width: indiceActual == i ? 22 : 8,
                               height: 8,
                               decoration: BoxDecoration(
                                 color: indiceActual == i
                                     ? Colors.white
-                                    : const Color(0x73FFFFFF),
+                                    :  Color(0x73FFFFFF),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                             ),
                           ),
                         ),
-
-                        // Badge con número de foto y ayuda visual de deslizamiento
                         Container(
-                          padding: const EdgeInsets.symmetric(
+                          padding:  EdgeInsets.symmetric(
                             horizontal: 10,
                             vertical: 5,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0x8C000000),
+                            color:  Color(0x8C000000),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
                             children: [
-                              const Icon(
+                               Icon(
                                 Icons.swipe,
                                 size: 14,
                                 color: Colors.white70,
                               ),
-                              const SizedBox(width: 4),
+                               SizedBox(width: 4),
                               Text(
                                 '${indiceActual + 1}/${lugar.imagenes.length}',
-                                style: const TextStyle(
+                                style:  TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -242,19 +227,16 @@ class _DetallePantallaState extends State<DetallePantalla> {
               ),
             ),
           ),
-
-          // Contenido principal de la pantalla de detalle
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding:  EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Estado de favorito destacado
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding:  EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 6,
                         ),
@@ -279,7 +261,7 @@ class _DetallePantallaState extends State<DetallePantalla> {
                               color: esFavorito ? Colors.red : Colors.grey,
                               size: 16,
                             ),
-                            const SizedBox(width: 6),
+                             SizedBox(width: 6),
                             Text(
                               esFavorito
                                   ? 'Guardado en Favoritos'
@@ -295,10 +277,9 @@ class _DetallePantallaState extends State<DetallePantalla> {
                           ],
                         ),
                       ),
-                      const Spacer(),
-                      // Etiqueta de Atractivo Turístico
+                       Spacer(),
                       Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding:  EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 6,
                         ),
@@ -319,13 +300,10 @@ class _DetallePantallaState extends State<DetallePantalla> {
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 16),
-
-                  // Nombre del Lugar Turístico
+                  SizedBox(height: 16),
                   Text(
                     lugar.nombre,
-                    style: const TextStyle(
+                    style:  TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
@@ -333,17 +311,15 @@ class _DetallePantallaState extends State<DetallePantalla> {
                     ),
                   ),
 
-                  const SizedBox(height: 8),
-
-                  // Ubicación del lugar con icono
+                   SizedBox(height: 8),
                   Row(
                     children: [
-                      const Icon(
+                       Icon(
                         Icons.location_on,
                         color: Colors.redAccent,
                         size: 20,
                       ),
-                      const SizedBox(width: 6),
+                       SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           lugar.ubicacion,
@@ -357,12 +333,10 @@ class _DetallePantallaState extends State<DetallePantalla> {
                     ],
                   ),
 
-                  const SizedBox(height: 24),
-                  const Divider(height: 1, color: Color(0xFFE2E8F0)),
-                  const SizedBox(height: 20),
-
-                  // Sección "Acerca del lugar" (Descripción)
-                  const Text(
+                   SizedBox(height: 24),
+                   Divider(height: 1, color: Color(0xFFE2E8F0)),
+                   SizedBox(height: 20),
+                   Text(
                     'Acerca del lugar',
                     style: TextStyle(
                       fontSize: 18,
@@ -370,69 +344,16 @@ class _DetallePantallaState extends State<DetallePantalla> {
                       color: Color(0xFF1E293B),
                     ),
                   ),
-
-                  const SizedBox(height: 10),
-
+                  SizedBox(height: 10),
                   Text(
                     lugar.descripcion,
-                    style: const TextStyle(
+                    style:  TextStyle(
                       fontSize: 15,
                       height: 1.6,
                       color: Color(0xFF475569),
                     ),
                   ),
-
-                  const SizedBox(height: 28),
-
-                  // Tarjeta explicativa del Gesto 2 implementado
-                  Card(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(color: Colors.blue.shade100),
-                    ),
-                    color: const Color(0x1F2196F3),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.touch_app_outlined,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 28,
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Gesto 2: Deslizamiento horizontal',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Color(0xFF0F172A),
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Desliza la fotografía superior hacia la izquierda o derecha para ver la galería completa y actualizar el estado en el ViewModel.',
-                                  style: TextStyle(
-                                    fontSize: 12.5,
-                                    color: Colors.grey.shade800,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Botón de acción para marcar/desmarcar favoritos directamente
+                  SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -459,7 +380,7 @@ class _DetallePantallaState extends State<DetallePantalla> {
                         esFavorito
                             ? 'Quitar de mis favoritos'
                             : 'Agregar a mis favoritos',
-                        style: const TextStyle(
+                        style:  TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -467,7 +388,7 @@ class _DetallePantallaState extends State<DetallePantalla> {
                     ),
                   ),
 
-                  const SizedBox(height: 40),
+                   SizedBox(height: 40),
                 ],
               ),
             ),

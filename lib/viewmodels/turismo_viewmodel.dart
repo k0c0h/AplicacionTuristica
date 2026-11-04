@@ -40,28 +40,19 @@ class TurismoViewModel extends ChangeNotifier {
     ),
   ];
 
-  // Estado administrado por Provider:
-  // 1. Lugares favoritos (almacena los IDs de los lugares favoritos)
   final Set<int> _favoritos = {1};
-
-  // 2. Lugar seleccionado
   LugarTuristico? _lugarSeleccionado;
-
-  // 3. Índice de la imagen actual en la galería
   int _indiceImagenActual = 0;
 
-  // Getters
   List<LugarTuristico> get lugares => _lugares;
   Set<int> get favoritos => _favoritos;
   LugarTuristico? get lugarSeleccionado => _lugarSeleccionado;
   int get indiceImagenActual => _indiceImagenActual;
 
-  // Comprueba si un lugar está marcado como favorito
   bool esFavorito(int id) {
     return _favoritos.contains(id);
   }
 
-  // Gesto 1 / Acción: Alterna el estado de favorito de un lugar
   void alternarFavorito(int id) {
     if (_favoritos.contains(id)) {
       _favoritos.remove(id);
@@ -71,14 +62,12 @@ class TurismoViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Establece el lugar seleccionado para ver en detalle
   void seleccionarLugar(LugarTuristico lugar) {
     _lugarSeleccionado = lugar;
     _indiceImagenActual = 0;
     notifyListeners();
   }
 
-  // Gesto 2 / Acción: Cambia el índice de la fotografía actual al deslizar horizontalmente
   void cambiarImagen(int indice) {
     if (_indiceImagenActual != indice) {
       _indiceImagenActual = indice;
@@ -86,7 +75,6 @@ class TurismoViewModel extends ChangeNotifier {
     }
   }
 
-  // Reinicia el índice de imagen
   void reiniciarIndice() {
     _indiceImagenActual = 0;
     notifyListeners();
